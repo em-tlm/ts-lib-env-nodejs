@@ -3,11 +3,11 @@
 A simple library for validating and accessing environment variables in Node.js (v6.0 or later) programs:
 
 * ensures that your program only runs when all of its environment dependencies are met
-** while providing a path to write unit tests that run without setting the environment
+  * while providing a path to write unit tests that run without setting the environment
 * assigns sole responsibility of setting environment variables to the environment itself
-** via process.env
+  * via process.env
 * provides executable documentation about the environment your program expects to run in
-** requires by default expected Tetrascience environment variables
+  * requires by default expected Tetrascience environment variables
 * exposes an immutable API for accessing your environment variables
 * ensures that typos when accessing environment variable access won't continue silently and cause code to fail in unexpected ways
 
@@ -30,7 +30,7 @@ const schema = {
   VAR_THREE: boolean().optional(),
 };
 
-// process.env should be set by environment
+// process.env should already be set by environment
 
 // for ex, assume process.env is { VAR_ONE: 'foo', VAR_TWO: '2', NODE_ENV: 'production', SERVICE_NAME: 'bar' }
 
@@ -53,9 +53,9 @@ getEnv('VAR_NOT_IN_SCHEMA'); // Uncaught Error ....
 
 ### Standard Tetrascience environment variables (required regardless of schema)
 * NODE_ENV
-** allowed values: 'test', 'development', 'production'
+  * allowed values: 'test', 'development', 'production'
 * SERVICE_NAME
-** allowed values: any string
+  * allowed values: any string
 
 ## Testing
 
