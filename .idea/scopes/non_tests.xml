@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="non-tests" pattern="!file[ts-lib-node-env]:test//*" />
+</component>
