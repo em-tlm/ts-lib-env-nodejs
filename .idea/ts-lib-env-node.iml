@@ -2,12 +2,12 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <excludeFolder url="file://$MODULE_DIR$/../ts-lib-env-node/.tmp" />
-      <excludeFolder url="file://$MODULE_DIR$/../ts-lib-env-node/build" />
-      <excludeFolder url="file://$MODULE_DIR$/../ts-lib-env-node/config" />
-      <excludeFolder url="file://$MODULE_DIR$/../ts-lib-env-node/submodules" />
-      <excludeFolder url="file://$MODULE_DIR$/../ts-lib-env-node/temp" />
-      <excludeFolder url="file://$MODULE_DIR$/../ts-lib-env-node/tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/../ts-lib-env-nodejs/.tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/../ts-lib-env-nodejs/build" />
+      <excludeFolder url="file://$MODULE_DIR$/../ts-lib-env-nodejs/config" />
+      <excludeFolder url="file://$MODULE_DIR$/../ts-lib-env-nodejs/submodules" />
+      <excludeFolder url="file://$MODULE_DIR$/../ts-lib-env-nodejs/temp" />
+      <excludeFolder url="file://$MODULE_DIR$/../ts-lib-env-nodejs/tmp" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

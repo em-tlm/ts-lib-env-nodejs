@@ -1,4 +1,4 @@
-# ts-lib-node-env
+# ts-lib-env-nodejs
 
 A simple library for validating and accessing environment variables in Node.js (v6.0 or later) programs:
 
@@ -14,7 +14,7 @@ A simple library for validating and accessing environment variables in Node.js (
 ## Installation
 
 ```sh
-$ yarn install tetrascience/ts-lib-env-node
+$ yarn install tetrascience/ts-lib-env-nodejs
 ```
 
 ## Usage
