@@ -47,14 +47,14 @@ describe('tsEnv', function() {
       optStr: 'foofoo',
     };
 
-    it('it accepts a string', function() {
+    it('accepts a string', function() {
       process.env = validProcessEnv;
       const getEnv = tsEnv(schema);
 
       assert.doesNotThrow(() => getEnv('str'));
     });
 
-    it('it returns the value of the environment variable from process.env, properly coerced', function() {
+    it('returns the value of the environment variable from process.env, properly coerced', function() {
       process.env = validProcessEnv;
       const getEnv = tsEnv(schema);
 
@@ -62,14 +62,14 @@ describe('tsEnv', function() {
       assert.equal(getEnv('num'), 2);
     });
 
-    it('it returns the value of optional environment variables', function() {
+    it('returns the value of optional environment variables', function() {
       process.env = validProcessEnv;
       const getEnv = tsEnv(schema);
 
       assert.equal(getEnv('optStr'), 'foofoo');
     });
 
-    it('it throws if requested environment variable is not defined in schema', function() {
+    it('throws if requested environment variable is not defined in schema', function() {
       process.env = validProcessEnv;
       const getEnv = tsEnv(schema);
 

@@ -20,7 +20,7 @@ $ yarn install tetrascience/ts-lib-env-nodejs
 ## Usage
 
 ```javascript
-const { string, num } = require('joi');
+const { string, number, boolean } = require('joi');
 const tsEnv = require('ts-env');
 
 // uses Joi schemas

@@ -5,7 +5,6 @@
   "main": "index.js",
   "repository": "https://github.com/tetrascience/ts-lib-env-nodejs.git",
   "dependencies": {
-    "lodash": "^4.17.4",
     "joi": "^10.6.0"
   },
   "devDependencies": {
@@ -16,7 +15,7 @@
     "sinon": "^2.0.0"
   },
   "scripts": {
-    "lint": "./node_modules/.bin/eslint . --ext .jsx --ext .js --ext .json",
-    "test": "NODE_ENV=test mocha --recursive --timeout 1000 --require co-mocha"
+    "lint": "eslint . --ext .jsx --ext .js --ext .json",
+    "test": "NODE_ENV=test mocha --recursive --timeout 1000"
   }
 }

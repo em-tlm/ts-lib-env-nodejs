@@ -32,7 +32,11 @@ module.exports = (schema) => {
 
   return function getEnv(variable) {
     if (error) throw error;
-    Joi.assert(variable, string().valid(Object.keys(fullSchema)).required(), 'Requested environment variable not found');
+    Joi.assert(
+      variable,
+      string().valid(Object.keys(fullSchema)).required(),
+      'Requested environment variable not found'
+    );
 
     return value[variable];
   };
