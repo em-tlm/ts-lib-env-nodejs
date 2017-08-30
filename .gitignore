@@ -59,6 +59,9 @@ typings/
 
 # JetBrains IDEs (Webstorm etc...)
 
+# All of JetBrains
+.idea
+
 # User-specific stuff:
 .idea/**/workspace.xml
 .idea/**/tasks.xml
