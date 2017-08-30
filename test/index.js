@@ -3,19 +3,23 @@
 /* eslint-disable no-process-env */
 
 const { assert } = require('chai');
-const { string, number } = require('joi');
+
+const Joi = require('joi');
+
+const { string, number, object } = Joi;
 
 const tsEnv = require('../index');
 
 describe('tsEnv', function() {
-  it('accepts an schema object', function() {
+  it('accepts a Joi schema object', function() {
     assert.throws(() => tsEnv());
     assert.throws(() => tsEnv('string'));
-    assert.doesNotThrow(() => tsEnv({}));
-    assert.doesNotThrow(() => tsEnv({ str: string() }));
+    assert.throws(() => tsEnv({}));
+    assert.doesNotThrow(() => tsEnv(object()));
+    assert.doesNotThrow(() => tsEnv(object({ str: string() })));
   });
   it('returns a function "getEnv"', function() {
-    const returnVal = tsEnv({ str: string() });
+    const returnVal = tsEnv(object({ str: string() }));
 
     assert.instanceOf(returnVal, Function);
     assert.equal(returnVal.name, 'getEnv');
@@ -32,12 +36,12 @@ describe('tsEnv', function() {
       process.env = env;
     });
 
-    const schema = {
+    const schema = object().keys({
       str: string(),
       num: number(),
       optStr: string().optional(),
       forbStr: string().forbidden(),
-    };
+    });
 
     const validProcessEnv = {
       NODE_ENV: 'test',
@@ -117,7 +121,7 @@ describe('tsEnv', function() {
 
     it('does not obey default values set in the schema', function() {
       process.env = validProcessEnv;
-      const getEnv = tsEnv(Object.assign({}, schema, { str: string().default('baz') }));
+      const getEnv = tsEnv(schema.keys({ str: string().default('baz') }));
 
       assert.notEqual(getEnv('str'), 'baz');
       assert.equal(getEnv('str'), 'bar');

@@ -3,15 +3,14 @@
 /* eslint-disable no-process-env */
 
 const Joi = require('joi');
+const errors = require('ts-errors');
 
 const { string, object } = Joi;
 
 module.exports = (schema) => {
-  Joi.assert(schema, object().required());
+  Joi.assert(schema, object().schema().required());
 
-  const fullSchema = Object.assign(
-    {},
-    schema,
+  const fullSchema = schema.keys(
     {
       SERVICE_NAME: string(),
       NODE_ENV: string().valid(['test', 'development', 'production']),
@@ -20,7 +19,7 @@ module.exports = (schema) => {
 
   const { error, value } = Joi.validate(
     process.env,
-    object().keys(fullSchema),
+    fullSchema,
     {
       stripUnknown: true,
       noDefaults: true,
@@ -32,11 +31,10 @@ module.exports = (schema) => {
 
   return function getEnv(variable) {
     if (error) throw error;
-    Joi.assert(
-      variable,
-      string().valid(Object.keys(fullSchema)).required(),
-      'Requested environment variable not found'
-    );
+
+    if (!Joi.reach(fullSchema, variable)) {
+      throw new errors.ValidationError(`Requested environment variable "${variable}" not found`);
+    }
 
     return value[variable];
   };
