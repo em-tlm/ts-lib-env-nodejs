@@ -1,6 +1,6 @@
 {
   "name": "ts-env",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "private": true,
   "main": "index.js",
   "repository": "https://github.com/tetrascience/ts-lib-env-nodejs.git",
