@@ -30,6 +30,9 @@ module.exports = (schema) => {
 
   Object.freeze(value);
 
+  // set process.env.NODE_ENV to production by default in case express or anything else needs it
+  process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+
   return function getEnv(variable) {
     if (error) throw error;
 
