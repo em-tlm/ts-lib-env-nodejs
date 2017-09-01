@@ -13,7 +13,8 @@ module.exports = (schema) => {
   const fullSchema = schema.keys(
     {
       SERVICE_NAME: string(),
-      NODE_ENV: string().valid(['test', 'development', 'production']),
+      ENV: string().valid(['test', 'local', 'demo', 'ci', 'staging', 'production']),
+      TENANT: string(),
     }
   );
 

@@ -44,8 +44,9 @@ describe('tsEnv', function() {
     });
 
     const validProcessEnv = {
-      NODE_ENV: 'test',
+      ENV: 'production',
       SERVICE_NAME: 'foo',
+      TENANT: 'multi',
       str: 'bar',
       num: '2',
       optStr: 'foofoo',
@@ -100,7 +101,7 @@ describe('tsEnv', function() {
       process.env = missingEnv;
       const getEnv = tsEnv(schema);
 
-      assert.throws(() => getEnv('NODE_ENV'));
+      assert.throws(() => getEnv('ENV'));
     });
 
     it('does not throw if optional environment variables in schema are not in process.env', function() {
@@ -109,7 +110,7 @@ describe('tsEnv', function() {
       process.env = optMissingEnv;
       const getEnv = tsEnv(schema);
 
-      assert.doesNotThrow(() => getEnv('NODE_ENV'));
+      assert.doesNotThrow(() => getEnv('ENV'));
     });
 
     it('throws if forbidden environment variables in schema are in process.env', function() {
@@ -127,20 +128,32 @@ describe('tsEnv', function() {
       assert.equal(getEnv('str'), 'bar');
     });
 
-    it('requires process.env.NODE_ENV to equal test, development, or production', function() {
-      process.env = Object.assign({ }, validProcessEnv, { NODE_ENV: 'foo' });
+    it('requires process.env.NODE_ENV to equal \'test\', \'local\', \'demo\', \'ci\', \'staging\', \'production\'', function() {
+      process.env = Object.assign({ }, validProcessEnv, { ENV: 'foo' });
       let getEnv = tsEnv(schema);
       assert.throws(() => getEnv('str'));
 
-      process.env = Object.assign({ }, validProcessEnv, { NODE_ENV: 'test' });
+      process.env = Object.assign({ }, validProcessEnv, { ENV: 'test' });
       getEnv = tsEnv(schema);
       assert.doesNotThrow(() => getEnv('str'));
 
-      process.env = Object.assign({ }, validProcessEnv, { NODE_ENV: 'development' });
+      process.env = Object.assign({ }, validProcessEnv, { ENV: 'local' });
       getEnv = tsEnv(schema);
       assert.doesNotThrow(() => getEnv('str'));
 
-      process.env = Object.assign({ }, validProcessEnv, { NODE_ENV: 'production' });
+      process.env = Object.assign({ }, validProcessEnv, { ENV: 'demo' });
+      getEnv = tsEnv(schema);
+      assert.doesNotThrow(() => getEnv('str'));
+
+      process.env = Object.assign({ }, validProcessEnv, { ENV: 'ci' });
+      getEnv = tsEnv(schema);
+      assert.doesNotThrow(() => getEnv('str'));
+
+      process.env = Object.assign({ }, validProcessEnv, { ENV: 'staging' });
+      getEnv = tsEnv(schema);
+      assert.doesNotThrow(() => getEnv('str'));
+
+      process.env = Object.assign({ }, validProcessEnv, { ENV: 'production' });
       getEnv = tsEnv(schema);
       assert.doesNotThrow(() => getEnv('str'));
     });
@@ -151,6 +164,16 @@ describe('tsEnv', function() {
       assert.throws(() => getEnv('str'));
 
       process.env = Object.assign({ }, validProcessEnv, { SERVICE_NAME: 'foo' });
+      getEnv = tsEnv(schema);
+      assert.doesNotThrow(() => getEnv('str'));
+    });
+
+    it('requires process.env.TENANT to be a non-empty string', function() {
+      process.env = Object.assign({ }, validProcessEnv, { TENANT: '' });
+      let getEnv = tsEnv(schema);
+      assert.throws(() => getEnv('str'));
+
+      process.env = Object.assign({ }, validProcessEnv, { TENANT: 'foo' });
       getEnv = tsEnv(schema);
       assert.doesNotThrow(() => getEnv('str'));
     });
