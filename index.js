@@ -2,15 +2,15 @@
 
 /* eslint-disable no-process-env */
 
-const Joi = require('joi');
-const errors = require('ts-errors');
+var Joi = require('joi');
 
-const { string, object } = Joi;
+var string = Joi.string;
+var object = Joi.object;
 
-module.exports = (schema) => {
+module.exports = function(schema) {
   Joi.assert(schema, object().schema().required());
 
-  const fullSchema = schema.keys(
+  var fullSchema = schema.keys(
     {
       SERVICE_NAME: string(),
       ENV: string().valid(['test', 'local', 'demo', 'ci', 'staging', 'production']),
@@ -18,7 +18,7 @@ module.exports = (schema) => {
     }
   );
 
-  const { error, value } = Joi.validate(
+  var res = Joi.validate(
     process.env,
     fullSchema,
     {
@@ -27,6 +27,9 @@ module.exports = (schema) => {
       presence: 'required',
     }
   );
+
+  var error = res.error;
+  var value = res.value;
 
   Object.freeze(value);
 
@@ -37,7 +40,7 @@ module.exports = (schema) => {
     if (error) throw error;
 
     if (!Joi.reach(fullSchema, variable)) {
-      throw new errors.ValidationError(`Requested environment variable "${variable}" not found`);
+      throw new Error("Requested environment variable" + variable + " not found");
     }
 
     return value[variable];

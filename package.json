@@ -5,8 +5,7 @@
   "main": "index.js",
   "repository": "https://github.com/tetrascience/ts-lib-env-nodejs.git",
   "dependencies": {
-    "joi": "^10.6.0",
-    "ts-errors": "tetrascience/ts-lib-errors-nodejs"
+    "joi": "^10.6.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
