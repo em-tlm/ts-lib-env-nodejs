@@ -54,7 +54,7 @@ getEnv('VAR_NOT_IN_SCHEMA'); // Uncaught Error ....
 
 ### Standard Tetrascience environment variables (required regardless of schema)
 * ENV
-  * allowed values: 'test', 'local', 'demo', 'ci', 'staging', 'production'
+  * allowed values: 'test', 'local', 'demo', 'development', 'staging', 'production'
 * TENANT
   * allowed values: any string
 * SERVICE_NAME
