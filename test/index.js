@@ -128,7 +128,7 @@ describe('tsEnv', function() {
       assert.equal(getEnv('str'), 'bar');
     });
 
-    it('requires process.env.NODE_ENV to equal \'test\', \'local\', \'demo\', \'ci\', \'staging\', \'production\'', function() {
+    it('requires process.env.NODE_ENV to equal \'test\', \'local\', \'demo\', \'development\', \'staging\', \'production\'', function() {
       process.env = Object.assign({ }, validProcessEnv, { ENV: 'foo' });
       let getEnv = tsEnv(schema);
       assert.throws(() => getEnv('str'));
@@ -145,7 +145,7 @@ describe('tsEnv', function() {
       getEnv = tsEnv(schema);
       assert.doesNotThrow(() => getEnv('str'));
 
-      process.env = Object.assign({ }, validProcessEnv, { ENV: 'ci' });
+      process.env = Object.assign({ }, validProcessEnv, { ENV: 'development' });
       getEnv = tsEnv(schema);
       assert.doesNotThrow(() => getEnv('str'));
 
