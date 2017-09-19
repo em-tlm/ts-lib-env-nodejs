@@ -1,6 +1,6 @@
 # ts-lib-env-nodejs
 
-https://travis-ci.com/tetrascience/ts-lib-env-nodejs.svg?token=nvVqseaQzbxpcJ6cpw1t&branch=1.1.0
+[![Build Status](https://travis-ci.com/tetrascience/ts-lib-env-nodejs.svg?token=nvVqseaQzbxpcJ6cpw1t&branch=master)](https://travis-ci.com/tetrascience/ts-lib-env-nodejs)
 
 A simple library for validating and accessing environment variables in Node.js (v6.0 or later) programs:
 
