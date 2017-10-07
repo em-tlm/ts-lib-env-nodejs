@@ -42,6 +42,14 @@ describe('tsEnv', function() {
       optStr: 'foofoo',
     };
 
+    it('throws an error if setEnv hasnt been called with an object', function() {
+      const getEnv = tsEnv(schema);
+      assert.throws(() => getEnv('str'));
+      getEnv.setEnv('blah');
+      assert.throws(() => getEnv('str'));
+    });
+
+
     it('accepts a string', function() {
       const getEnv = tsEnv(schema);
       getEnv.setEnv(validProcessEnv);
