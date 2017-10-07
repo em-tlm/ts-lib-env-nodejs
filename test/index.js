@@ -26,16 +26,6 @@ describe('tsEnv', function() {
   });
 
   describe('getEnv', function() {
-    const env = Object.assign({}, process.env);
-
-    afterEach(() => {
-      process.env = {};
-    });
-
-    after(() => {
-      process.env = env;
-    });
-
     const schema = object().keys({
       str: string(),
       num: number(),
@@ -53,44 +43,44 @@ describe('tsEnv', function() {
     };
 
     it('accepts a string', function() {
-      process.env = validProcessEnv;
       const getEnv = tsEnv(schema);
+      getEnv.setEnv(validProcessEnv);
 
       assert.doesNotThrow(() => getEnv('str'));
     });
 
     it('returns the value of the environment variable from process.env, properly coerced', function() {
-      process.env = validProcessEnv;
       const getEnv = tsEnv(schema);
+      getEnv.setEnv(validProcessEnv);
 
       assert.equal(getEnv('str'), 'bar');
       assert.equal(getEnv('num'), 2);
     });
 
     it('returns the value of optional environment variables', function() {
-      process.env = validProcessEnv;
       const getEnv = tsEnv(schema);
+      getEnv.setEnv(validProcessEnv);
 
       assert.equal(getEnv('optStr'), 'foofoo');
     });
 
     it('throws if requested environment variable is not defined in schema', function() {
-      process.env = validProcessEnv;
       const getEnv = tsEnv(schema);
+      getEnv.setEnv(validProcessEnv);
 
       assert.throws(() => getEnv('baz'));
     });
 
     it('throws if any variable in process.env cannot be coerced to the correct type', function() {
-      process.env = Object.assign({ }, validProcessEnv, { num: 'two' });
       const getEnv = tsEnv(schema);
+      getEnv.setEnv(Object.assign({ }, validProcessEnv, { num: 'two' }));
 
       assert.throws(() => getEnv('str'));
     });
 
     it('strips unknown environment variables', function() {
-      process.env = Object.assign({ foo: 'barbar' }, validProcessEnv);
       const getEnv = tsEnv(schema);
+      getEnv.setEnv(Object.assign({ foo: 'barbar' }, validProcessEnv));
 
       assert.throws(() => getEnv('foo'));
     });
@@ -98,8 +88,8 @@ describe('tsEnv', function() {
     it('throws if process.env is missing environment variables in schema', function() {
       const missingEnv = Object.assign({}, validProcessEnv);
       delete missingEnv.str;
-      process.env = missingEnv;
       const getEnv = tsEnv(schema);
+      getEnv.setEnv(missingEnv);
 
       assert.throws(() => getEnv('ENV'));
     });
@@ -107,74 +97,75 @@ describe('tsEnv', function() {
     it('does not throw if optional environment variables in schema are not in process.env', function() {
       const optMissingEnv = Object.assign({}, validProcessEnv);
       delete optMissingEnv.foofoo;
-      process.env = optMissingEnv;
       const getEnv = tsEnv(schema);
+      getEnv.setEnv(optMissingEnv);
 
       assert.doesNotThrow(() => getEnv('ENV'));
     });
 
     it('throws if forbidden environment variables in schema are in process.env', function() {
-      process.env = Object.assign({ forbStr: 'bar' }, validProcessEnv);
       const getEnv = tsEnv(schema);
+      getEnv.setEnv(Object.assign({ forbStr: 'bar' }, validProcessEnv));
 
       assert.throws(() => getEnv('str'));
     });
 
     it('does not obey default values set in the schema', function() {
-      process.env = validProcessEnv;
       const getEnv = tsEnv(schema.keys({ str: string().default('baz') }));
+      getEnv.setEnv(validProcessEnv);
 
       assert.notEqual(getEnv('str'), 'baz');
       assert.equal(getEnv('str'), 'bar');
     });
 
     it('requires process.env.NODE_ENV to equal \'test\', \'local\', \'demo\', \'development\', \'staging\', \'production\'', function() {
-      process.env = Object.assign({ }, validProcessEnv, { ENV: 'foo' });
       let getEnv = tsEnv(schema);
+      getEnv.setEnv(Object.assign({ }, validProcessEnv, { ENV: 'foo' }));
       assert.throws(() => getEnv('str'));
 
-      process.env = Object.assign({ }, validProcessEnv, { ENV: 'test' });
       getEnv = tsEnv(schema);
+      getEnv.setEnv(Object.assign({ }, validProcessEnv, { ENV: 'test' }));
       assert.doesNotThrow(() => getEnv('str'));
 
-      process.env = Object.assign({ }, validProcessEnv, { ENV: 'local' });
       getEnv = tsEnv(schema);
+      getEnv.setEnv(Object.assign({ }, validProcessEnv, { ENV: 'local' }));
       assert.doesNotThrow(() => getEnv('str'));
 
-      process.env = Object.assign({ }, validProcessEnv, { ENV: 'demo' });
       getEnv = tsEnv(schema);
+      getEnv.setEnv(Object.assign({ }, validProcessEnv, { ENV: 'demo' }));
       assert.doesNotThrow(() => getEnv('str'));
 
-      process.env = Object.assign({ }, validProcessEnv, { ENV: 'development' });
       getEnv = tsEnv(schema);
+      getEnv.setEnv(Object.assign({ }, validProcessEnv, { ENV: 'development' }));
       assert.doesNotThrow(() => getEnv('str'));
 
-      process.env = Object.assign({ }, validProcessEnv, { ENV: 'staging' });
       getEnv = tsEnv(schema);
+      getEnv.setEnv(Object.assign({ }, validProcessEnv, { ENV: 'staging' }));
       assert.doesNotThrow(() => getEnv('str'));
 
-      process.env = Object.assign({ }, validProcessEnv, { ENV: 'production' });
       getEnv = tsEnv(schema);
+      getEnv.setEnv(Object.assign({ }, validProcessEnv, { ENV: 'production' }));
       assert.doesNotThrow(() => getEnv('str'));
     });
 
     it('requires process.env.SERVICE_NAME to be a non-empty string', function() {
-      process.env = Object.assign({ }, validProcessEnv, { SERVICE_NAME: '' });
       let getEnv = tsEnv(schema);
+      getEnv.setEnv(Object.assign({ }, validProcessEnv, { SERVICE_NAME: '' }));
       assert.throws(() => getEnv('str'));
 
-      process.env = Object.assign({ }, validProcessEnv, { SERVICE_NAME: 'foo' });
       getEnv = tsEnv(schema);
+      getEnv.setEnv(Object.assign({ }, validProcessEnv, { SERVICE_NAME: 'foo' }));
       assert.doesNotThrow(() => getEnv('str'));
     });
 
     it('requires process.env.TENANT to be a non-empty string', function() {
-      process.env = Object.assign({ }, validProcessEnv, { TENANT: '' });
       let getEnv = tsEnv(schema);
+      getEnv.setEnv(Object.assign({ }, validProcessEnv, { TENANT: '' }));
       assert.throws(() => getEnv('str'));
 
-      process.env = Object.assign({ }, validProcessEnv, { TENANT: 'foo' });
+
       getEnv = tsEnv(schema);
+      getEnv.setEnv(Object.assign({ }, validProcessEnv, { TENANT: 'foo' }));
       assert.doesNotThrow(() => getEnv('str'));
     });
   });
