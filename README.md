@@ -33,13 +33,15 @@ const schema = object({
   VAR_THREE: boolean().optional(),
 });
 
-// process.env should already be set by environment
-
-// for ex, assume process.env is { VAR_ONE: 'foo', VAR_TWO: '2', ENV: 'production', SERVICE_NAME: 'bar', TENANT: 'multi' }
-
 const getEnv = tsEnv(schema); // always succeeds if schema itself is a valid Joi schema
 
 // module.exports = getEnv;
+
+getEnv.setEnv(process.env); // this sets the environment which backs the getEnv singleton
+                            // this should in general be set to process.env, and never changed
+                            // the one notable exception is for purposes of running automated tests
+
+// for ex, assume process.env is { VAR_ONE: 'foo', VAR_TWO: '2', ENV: 'production', SERVICE_NAME: 'bar', TENANT: 'multi' }
 
 // returns properly coerced value for allowed environment variables
 getEnv('VAR_ONE'); // 'foo'
@@ -61,6 +63,13 @@ getEnv('VAR_NOT_IN_SCHEMA'); // Uncaught Error ....
   * allowed values: any string
 * SERVICE_NAME
   * allowed values: any string ('multi', 'customer-1', 'customer-2')
+  
+### When writing tests
+
+getEnv.enterTestMode({env}); // this delays validation of your environment for this instance of getEnv
+                             // until variables are actually accessed in your application
+                             // it also resets the environment to whatever you pass in (default: {})
+
 
 ## Testing
 
