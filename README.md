@@ -61,6 +61,13 @@ getEnv('VAR_NOT_IN_SCHEMA'); // Uncaught Error ....
   * allowed values: any string
 * SERVICE_NAME
   * allowed values: any string ('multi', 'customer-1', 'customer-2')
+  
+### When writing tests
+
+getEnv.enterTestMode({env}); // this delays validation of your environment for this instance of getEnv
+                             // until variables are actually accessed in your application
+                             // it also resets the environment to whatever you pass in (default: {})
+
 
 ## Testing
 

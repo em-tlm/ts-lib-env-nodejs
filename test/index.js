@@ -219,6 +219,14 @@ describe('tsEnv', function() {
 
         assert.throws(() => getEnv('foo'));
       });
+
+      it('resets the environment to {} if no argument passed', function() {
+        const getEnv = tsEnv(schema);
+        getEnv.setEnv(validProcessEnv);
+        getEnv.enterTestMode();
+
+        assert.throws(() => getEnv('num'));
+      });
     });
   });
 });
