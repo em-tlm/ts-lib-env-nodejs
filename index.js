@@ -20,6 +20,7 @@ module.exports = (schema) => {
 
   let env;
   let validationResult;
+  let testMode;
 
   const getEnv = function getEnv(variable) {
     if (!validationResult) {
@@ -32,6 +33,7 @@ module.exports = (schema) => {
           stripUnknown: true,
           noDefaults: true,
           presence: 'required',
+          abortEarly: false,
         }
       );
 
@@ -41,7 +43,16 @@ module.exports = (schema) => {
       process.env.NODE_ENV = env.NODE_ENV || process.env.NODE_ENV || 'production';
     }
 
-    if (validationResult.error) throw validationResult.error;
+    if (validationResult.error) {
+      if (testMode) {
+        const variableValidationError = validationResult.error.details.find(
+          detail => detail.path === variable
+        );
+        if (variableValidationError) throw variableValidationError;
+      } else {
+        throw validationResult.error;
+      }
+    }
 
     if (!Joi.reach(fullSchema, variable)) {
       throw new errors.ValidationError(`Requested environment variable "${variable}" not found`);
@@ -53,6 +64,11 @@ module.exports = (schema) => {
   getEnv.setEnv = (e) => {
     env = e;
     validationResult = null;
+  };
+
+  getEnv.enterTestMode = (e) => {
+    getEnv.setEnv(e);
+    testMode = true;
   };
 
   return getEnv;

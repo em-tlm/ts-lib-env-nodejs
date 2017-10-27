@@ -176,5 +176,49 @@ describe('tsEnv', function() {
       getEnv.setEnv(Object.assign({ }, validProcessEnv, { TENANT: 'foo' }));
       assert.doesNotThrow(() => getEnv('str'));
     });
+    describe('in test mode', function(){
+      const partiallyValidProcessEnv = {
+        ENV: 'production',
+        SERVICE_NAME: 'foo',
+        TENANT: 'multi',
+        num: '2',
+        optStr: 'foofoo',
+      };
+
+      it('returns the value of environment variable which have been set, properly coerced', function() {
+        const getEnv = tsEnv(schema);
+        getEnv.enterTestMode(partiallyValidProcessEnv);
+
+        assert.equal(getEnv('num'), 2);
+      });
+
+      it('throws if value of requested environment variable has not been set', function() {
+        const getEnv = tsEnv(schema);
+        getEnv.enterTestMode(partiallyValidProcessEnv);
+
+        assert.throws(() => getEnv('str'));
+      });
+
+      it('throws if requested environment variable is not defined in schema', function() {
+        const getEnv = tsEnv(schema);
+        getEnv.enterTestMode(partiallyValidProcessEnv);
+
+        assert.throws(() => getEnv('baz'));
+      });
+
+      it('throws if requested variable in process.env cannot be coerced to the correct type', function() {
+        const getEnv = tsEnv(schema);
+        getEnv.enterTestMode(Object.assign({ }, validProcessEnv, { num: 'two' }));
+
+        assert.throws(() => getEnv('num'));
+      });
+
+      it('strips unknown environment variables', function() {
+        const getEnv = tsEnv(schema);
+        getEnv.enterTestMode(Object.assign({ foo: 'barbar' }, validProcessEnv));
+
+        assert.throws(() => getEnv('foo'));
+      });
+    });
   });
 });
