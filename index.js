@@ -48,7 +48,12 @@ module.exports = (schema) => {
         const variableValidationError = validationResult.error.details.find(
           detail => detail.path === variable
         );
-        if (variableValidationError) throw variableValidationError;
+        if (variableValidationError) {
+          throw new errors.ValidationError(
+            variableValidationError.message,
+            variableValidationError
+          );
+        }
       } else {
         throw validationResult.error;
       }
