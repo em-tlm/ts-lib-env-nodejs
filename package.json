@@ -1,11 +1,11 @@
 {
   "name": "ts-env",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "private": true,
   "main": "index.js",
   "repository": "https://github.com/tetrascience/ts-lib-env-nodejs.git",
   "dependencies": {
-    "joi": "^10.6.0",
+    "joi": "^13.1.2",
     "ts-errors": "tetrascience/ts-lib-errors-nodejs"
   },
   "devDependencies": {
