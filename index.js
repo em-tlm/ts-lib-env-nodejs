@@ -44,7 +44,9 @@ module.exports = (schema) => {
     if (validationResult.error) {
       if (testMode) {
         const variableValidationError = validationResult.error.details.find(
-          detail => detail.path === variable || detail.path.includes(variable)
+          detail => Array.isArray(detail.path)
+            ? detail.path.includes(variable)
+            : detail.path === variable
         );
         if (variableValidationError) {
           throw new errors.ValidationError(
