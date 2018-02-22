@@ -5,16 +5,14 @@
 const Joi = require('joi');
 const errors = require('ts-errors');
 
-const { string, object } = Joi;
-
 module.exports = (schema) => {
-  Joi.assert(schema, object().schema().required());
+  Joi.assert(schema, Joi.object().schema().required());
 
   const fullSchema = schema.keys(
     {
-      SERVICE_NAME: string(),
-      ENV: string().valid(['test', 'local', 'demo', 'development', 'staging', 'production']),
-      TENANT: string(),
+      SERVICE_NAME: Joi.string(),
+      ENV: Joi.string().valid(['test', 'local', 'demo', 'development', 'staging', 'production']),
+      TENANT: Joi.string(),
     }
   );
 
@@ -24,7 +22,7 @@ module.exports = (schema) => {
 
   const getEnv = function getEnv(variable) {
     if (!validationResult) {
-      Joi.assert(env, object().required(), 'Env must be set through .setEnv prior to use');
+      Joi.assert(env, Joi.object().required(), 'Env must be set through .setEnv prior to use');
 
       validationResult = Joi.validate(
         env,
@@ -46,7 +44,9 @@ module.exports = (schema) => {
     if (validationResult.error) {
       if (testMode) {
         const variableValidationError = validationResult.error.details.find(
-          detail => detail.path === variable
+          detail => Array.isArray(detail.path)
+            ? detail.path.includes(variable)
+            : detail.path === variable
         );
         if (variableValidationError) {
           throw new errors.ValidationError(

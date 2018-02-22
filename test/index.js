@@ -6,8 +6,6 @@ const { assert } = require('chai');
 
 const Joi = require('joi');
 
-const { string, number, object } = Joi;
-
 const tsEnv = require('../index');
 
 describe('tsEnv', function() {
@@ -15,22 +13,22 @@ describe('tsEnv', function() {
     assert.throws(() => tsEnv());
     assert.throws(() => tsEnv('string'));
     assert.throws(() => tsEnv({}));
-    assert.doesNotThrow(() => tsEnv(object()));
-    assert.doesNotThrow(() => tsEnv(object({ str: string() })));
+    assert.doesNotThrow(() => tsEnv(Joi.object()));
+    assert.doesNotThrow(() => tsEnv(Joi.object({ str: Joi.string() })));
   });
   it('returns a function "getEnv"', function() {
-    const returnVal = tsEnv(object({ str: string() }));
+    const returnVal = tsEnv(Joi.object({ str: Joi.string() }));
 
     assert.instanceOf(returnVal, Function);
     assert.equal(returnVal.name, 'getEnv');
   });
 
   describe('getEnv', function() {
-    const schema = object().keys({
-      str: string(),
-      num: number(),
-      optStr: string().optional(),
-      forbStr: string().forbidden(),
+    const schema = Joi.object().keys({
+      str: Joi.string(),
+      num: Joi.number(),
+      optStr: Joi.string().optional(),
+      forbStr: Joi.string().forbidden(),
     });
 
     const validProcessEnv = {
@@ -119,7 +117,7 @@ describe('tsEnv', function() {
     });
 
     it('does not obey default values set in the schema', function() {
-      const getEnv = tsEnv(schema.keys({ str: string().default('baz') }));
+      const getEnv = tsEnv(schema.keys({ str: Joi.string().default('baz') }));
       getEnv.setEnv(validProcessEnv);
 
       assert.notEqual(getEnv('str'), 'baz');
