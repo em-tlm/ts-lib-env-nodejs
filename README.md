@@ -16,8 +16,14 @@ A simple library for validating and accessing environment variables in Node.js (
 
 ## Installation
 
+For Hapi 16.x install:
 ```sh
 $ yarn add tetrascience/ts-lib-env-nodejs#^2.1.0
+```
+
+For Hapi 17.x install with:
+```sh
+$ yarn add tetrascience/ts-lib-env-nodejs#^3.0.0
 ```
 
 ## Usage
