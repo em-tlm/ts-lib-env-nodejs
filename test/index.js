@@ -116,12 +116,11 @@ describe('tsEnv', function() {
       assert.throws(() => getEnv('str'));
     });
 
-    it('does not obey default values set in the schema', function() {
+    it('does obeys default values set in the schema', function() {
       const getEnv = tsEnv(schema.keys({ str: Joi.string().default('baz') }));
       getEnv.setEnv(validProcessEnv);
 
-      assert.notEqual(getEnv('str'), 'baz');
-      assert.equal(getEnv('str'), 'bar');
+      assert.equal(getEnv('str'), 'baz');
     });
 
     it('requires process.env.NODE_ENV to equal \'test\', \'local\', \'demo\', \'development\', \'staging\', \'production\'', function() {

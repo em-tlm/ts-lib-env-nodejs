@@ -29,7 +29,6 @@ module.exports = (schema) => {
         fullSchema,
         {
           stripUnknown: true,
-          noDefaults: true,
           presence: 'required',
           abortEarly: false,
         }
